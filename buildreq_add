@@ -1,0 +1,12 @@
+# This file contains additional build requirements that did not get
+# picked up automatically. One name per line, no whitespace.
+testtools
+fixtures
+traceback2
+unittest2
+python-mimeparse
+extras
+linecache2
+six
+testresources
+testscenarios
