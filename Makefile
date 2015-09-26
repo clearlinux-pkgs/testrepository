@@ -1,4 +1,5 @@
 PKG_NAME := testrepository
-URL := https://github.com/testing-cabal/testrepository/archive/0.0.19.tar.gz
+URL := https://pypi.python.org/packages/source/t/testrepository/testrepository-0.0.20.tar.gz
+ARCHIVES :=
 
 include ../common/Makefile.common
