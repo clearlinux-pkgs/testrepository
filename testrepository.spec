@@ -6,7 +6,7 @@
 #
 Name     : testrepository
 Version  : 0.0.20
-Release  : 18
+Release  : 19
 URL      : https://pypi.python.org/packages/source/t/testrepository/testrepository-0.0.20.tar.gz
 Source0  : https://pypi.python.org/packages/source/t/testrepository/testrepository-0.0.20.tar.gz
 Source99 : https://pypi.python.org/packages/source/t/testrepository/testrepository-0.0.20.tar.gz.asc
@@ -15,6 +15,12 @@ Group    : Development/Tools
 License  : Apache-2.0
 Requires: testrepository-bin
 Requires: testrepository-python
+Requires: fixtures
+Requires: python-subunit
+Requires: pytz
+Requires: testresources
+Requires: testscenarios
+Requires: testtools
 BuildRequires : extras
 BuildRequires : fixtures
 BuildRequires : linecache2
@@ -51,8 +57,6 @@ bin components for the testrepository package.
 %package python
 Summary: python components for the testrepository package.
 Group: Default
-Requires: testresources
-Requires: testscenarios
 
 %description python
 python components for the testrepository package.
@@ -63,7 +67,7 @@ python components for the testrepository package.
 
 %build
 export LANG=C
-export SOURCE_DATE_EPOCH=1484580085
+export SOURCE_DATE_EPOCH=1489025791
 python2 setup.py build -b py2
 python3 setup.py build -b py3
 
@@ -73,7 +77,7 @@ export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 py.test || :
 %install
-export SOURCE_DATE_EPOCH=1484580085
+export SOURCE_DATE_EPOCH=1489025791
 rm -rf %{buildroot}
 python2 -tt setup.py build -b py2 install --root=%{buildroot} --force
 python3 -tt setup.py build -b py3 install --root=%{buildroot} --force
