@@ -6,7 +6,7 @@
 #
 Name     : testrepository
 Version  : 0.0.20
-Release  : 19
+Release  : 20
 URL      : https://pypi.python.org/packages/source/t/testrepository/testrepository-0.0.20.tar.gz
 Source0  : https://pypi.python.org/packages/source/t/testrepository/testrepository-0.0.20.tar.gz
 Source99 : https://pypi.python.org/packages/source/t/testrepository/testrepository-0.0.20.tar.gz.asc
