@@ -6,9 +6,9 @@
 #
 Name     : testrepository
 Version  : 0.0.20
-Release  : 20
-URL      : https://pypi.python.org/packages/source/t/testrepository/testrepository-0.0.20.tar.gz
-Source0  : https://pypi.python.org/packages/source/t/testrepository/testrepository-0.0.20.tar.gz
+Release  : 21
+URL      : http://pypi.debian.net/testrepository/testrepository-0.0.20.tar.gz
+Source0  : http://pypi.debian.net/testrepository/testrepository-0.0.20.tar.gz
 Source99 : https://pypi.python.org/packages/source/t/testrepository/testrepository-0.0.20.tar.gz.asc
 Summary  : A repository of test results.
 Group    : Development/Tools
@@ -39,12 +39,12 @@ BuildRequires : traceback2
 BuildRequires : unittest2
 
 %description
-Test Repository
 +++++++++++++++
-Overview
-~~~~~~~~
-This project provides a database of test results which can be used as part of
-developer workflow to ensure/check things like:
+        
+        Overview
+        ~~~~~~~~
+        
+        This project provides a database of test results which can be used as part of
 
 %package bin
 Summary: bin components for the testrepository package.
@@ -66,8 +66,11 @@ python components for the testrepository package.
 %setup -q -n testrepository-0.0.20
 
 %build
+export http_proxy=http://127.0.0.1:9/
+export https_proxy=http://127.0.0.1:9/
+export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1489025791
+export SOURCE_DATE_EPOCH=1503081822
 python2 setup.py build -b py2
 python3 setup.py build -b py3
 
@@ -77,10 +80,13 @@ export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 py.test || :
 %install
-export SOURCE_DATE_EPOCH=1489025791
+export SOURCE_DATE_EPOCH=1503081822
 rm -rf %{buildroot}
 python2 -tt setup.py build -b py2 install --root=%{buildroot} --force
 python3 -tt setup.py build -b py3 install --root=%{buildroot} --force
+echo ----[ mark ]----
+cat %{buildroot}/usr/lib/python3*/site-packages/*/requires.txt || :
+echo ----[ mark ]----
 
 %files
 %defattr(-,root,root,-)
@@ -91,4 +97,5 @@ python3 -tt setup.py build -b py3 install --root=%{buildroot} --force
 
 %files python
 %defattr(-,root,root,-)
-/usr/lib/python*/*
+/usr/lib/python2*/*
+/usr/lib/python3*/*
