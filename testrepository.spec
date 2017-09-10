@@ -6,14 +6,15 @@
 #
 Name     : testrepository
 Version  : 0.0.20
-Release  : 21
+Release  : 22
 URL      : http://pypi.debian.net/testrepository/testrepository-0.0.20.tar.gz
 Source0  : http://pypi.debian.net/testrepository/testrepository-0.0.20.tar.gz
-Source99 : https://pypi.python.org/packages/source/t/testrepository/testrepository-0.0.20.tar.gz.asc
+Source99 : http://pypi.debian.net/testrepository/testrepository-0.0.20.tar.gz.asc
 Summary  : A repository of test results.
 Group    : Development/Tools
 License  : Apache-2.0
 Requires: testrepository-bin
+Requires: testrepository-legacypython
 Requires: testrepository-python
 Requires: fixtures
 Requires: python-subunit
@@ -54,9 +55,18 @@ Group: Binaries
 bin components for the testrepository package.
 
 
+%package legacypython
+Summary: legacypython components for the testrepository package.
+Group: Default
+
+%description legacypython
+legacypython components for the testrepository package.
+
+
 %package python
 Summary: python components for the testrepository package.
 Group: Default
+Requires: testrepository-legacypython
 
 %description python
 python components for the testrepository package.
@@ -70,7 +80,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1503081822
+export SOURCE_DATE_EPOCH=1505072282
 python2 setup.py build -b py2
 python3 setup.py build -b py3
 
@@ -80,7 +90,7 @@ export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 py.test || :
 %install
-export SOURCE_DATE_EPOCH=1503081822
+export SOURCE_DATE_EPOCH=1505072282
 rm -rf %{buildroot}
 python2 -tt setup.py build -b py2 install --root=%{buildroot} --force
 python3 -tt setup.py build -b py3 install --root=%{buildroot} --force
@@ -95,7 +105,10 @@ echo ----[ mark ]----
 %defattr(-,root,root,-)
 /usr/bin/testr
 
-%files python
+%files legacypython
 %defattr(-,root,root,-)
 /usr/lib/python2*/*
+
+%files python
+%defattr(-,root,root,-)
 /usr/lib/python3*/*
