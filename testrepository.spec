@@ -6,7 +6,7 @@
 #
 Name     : testrepository
 Version  : 0.0.20
-Release  : 27
+Release  : 28
 URL      : http://pypi.debian.net/testrepository/testrepository-0.0.20.tar.gz
 Source0  : http://pypi.debian.net/testrepository/testrepository-0.0.20.tar.gz
 Source99 : http://pypi.debian.net/testrepository/testrepository-0.0.20.tar.gz.asc
@@ -14,7 +14,6 @@ Summary  : A repository of test results.
 Group    : Development/Tools
 License  : Apache-2.0
 Requires: testrepository-bin
-Requires: testrepository-legacypython
 Requires: testrepository-python3
 Requires: testrepository-python
 Requires: fixtures
@@ -56,19 +55,9 @@ Group: Binaries
 bin components for the testrepository package.
 
 
-%package legacypython
-Summary: legacypython components for the testrepository package.
-Group: Default
-Requires: python-core
-
-%description legacypython
-legacypython components for the testrepository package.
-
-
 %package python
 Summary: python components for the testrepository package.
 Group: Default
-Requires: testrepository-legacypython
 Requires: testrepository-python3
 
 %description python
@@ -92,8 +81,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1507179834
-python2 setup.py build -b py2
+export SOURCE_DATE_EPOCH=1523308805
 python3 setup.py build -b py3
 
 %check
@@ -102,10 +90,8 @@ export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 py.test || :
 %install
-export SOURCE_DATE_EPOCH=1507179834
 rm -rf %{buildroot}
-python2 -tt setup.py build -b py2 install --root=%{buildroot} --force
-python3 -tt setup.py build -b py3 install --root=%{buildroot} --force
+python3 -tt setup.py build -b py3 install --root=%{buildroot}
 echo ----[ mark ]----
 cat %{buildroot}/usr/lib/python3*/site-packages/*/requires.txt || :
 echo ----[ mark ]----
@@ -116,10 +102,6 @@ echo ----[ mark ]----
 %files bin
 %defattr(-,root,root,-)
 /usr/bin/testr
-
-%files legacypython
-%defattr(-,root,root,-)
-/usr/lib/python2*/*
 
 %files python
 %defattr(-,root,root,-)
