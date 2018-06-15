@@ -27,7 +27,7 @@ BuildRequires : fixtures
 BuildRequires : linecache2
 BuildRequires : pbr
 BuildRequires : pip
-BuildRequires : python-dev
+
 BuildRequires : python-mimeparse
 BuildRequires : python-subunit
 BuildRequires : python3-dev
