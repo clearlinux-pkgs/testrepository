@@ -6,32 +6,27 @@
 #
 Name     : testrepository
 Version  : 0.0.20
-Release  : 45
+Release  : 46
 URL      : http://pypi.debian.net/testrepository/testrepository-0.0.20.tar.gz
 Source0  : http://pypi.debian.net/testrepository/testrepository-0.0.20.tar.gz
-Source99 : http://pypi.debian.net/testrepository/testrepository-0.0.20.tar.gz.asc
+Source1  : http://pypi.debian.net/testrepository/testrepository-0.0.20.tar.gz.asc
 Summary  : A repository of test results.
 Group    : Development/Tools
 License  : Apache-2.0
-Requires: testrepository-bin
-Requires: testrepository-python3
-Requires: testrepository-python
+Requires: testrepository-bin = %{version}-%{release}
+Requires: testrepository-license = %{version}-%{release}
+Requires: testrepository-python = %{version}-%{release}
+Requires: testrepository-python3 = %{version}-%{release}
 Requires: fixtures
 Requires: python-subunit
-Requires: pytz
-Requires: testresources
-Requires: testscenarios
 Requires: testtools
+BuildRequires : buildreq-distutils3
 BuildRequires : extras
 BuildRequires : fixtures
 BuildRequires : linecache2
-BuildRequires : pbr
-BuildRequires : pip
-
+BuildRequires : pytest
 BuildRequires : python-mimeparse
 BuildRequires : python-subunit
-BuildRequires : python3-dev
-BuildRequires : setuptools
 BuildRequires : six
 BuildRequires : testresources
 BuildRequires : testscenarios
@@ -40,25 +35,83 @@ BuildRequires : traceback2
 BuildRequires : unittest2
 
 %description
+Test Repository
 +++++++++++++++
-        
-        Overview
-        ~~~~~~~~
-        
-        This project provides a database of test results which can be used as part of
+
+Overview
+~~~~~~~~
+
+This project provides a database of test results which can be used as part of
+developer workflow to ensure/check things like:
+
+* No commits without having had a test failure, test fixed cycle.
+* No commits without new tests being added.
+* What tests have failed since the last commit (to run just a subset).
+* What tests are currently failing and need work.
+
+Test results are inserted using subunit (and thus anything that can output
+subunit or be converted into a subunit stream can be accepted).
+
+A mailing list for discussion, usage and development is at
+https://launchpad.net/~testrepository-dev - all are welcome to join. Some folk
+hang out on #testrepository on irc.freenode.net.
+
+CI for the project is at http://build.robertcollins.net/job/testrepository-default/.
+
+Licensing
+~~~~~~~~~
+
+Test Repository is under BSD / Apache 2.0 licences. See the file COPYING in the source for details.
+
+Quick Start
+~~~~~~~~~~~
+
+Create a config file::
+  $ touch .testr.conf
+
+Create a repository::
+  $ testr init
+
+Load a test run into the repository::
+  $ testr load < testrun
+
+Query the repository::
+  $ testr stats
+  $ testr last
+  $ testr failing
+
+Delete a repository::
+  $ rm -rf .testrepository
+
+Documentation
+~~~~~~~~~~~~~
+
+More detailed documentation including design and implementation details, a
+user manual, and guidelines for development of Test Repository itself can be
+found at https://testrepository.readthedocs.org/en/latest, or in the source
+tree at doc/ (run make -C doc html).
 
 %package bin
 Summary: bin components for the testrepository package.
 Group: Binaries
+Requires: testrepository-license = %{version}-%{release}
 
 %description bin
 bin components for the testrepository package.
 
 
+%package license
+Summary: license components for the testrepository package.
+Group: Default
+
+%description license
+license components for the testrepository package.
+
+
 %package python
 Summary: python components for the testrepository package.
 Group: Default
-Requires: testrepository-python3
+Requires: testrepository-python3 = %{version}-%{release}
 
 %description python
 python components for the testrepository package.
@@ -68,6 +121,7 @@ python components for the testrepository package.
 Summary: python3 components for the testrepository package.
 Group: Default
 Requires: python3-core
+Provides: pypi(testrepository)
 
 %description python3
 python3 components for the testrepository package.
@@ -75,14 +129,22 @@ python3 components for the testrepository package.
 
 %prep
 %setup -q -n testrepository-0.0.20
+cd %{_builddir}/testrepository-0.0.20
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-export LANG=C
-export SOURCE_DATE_EPOCH=1523308805
-python3 setup.py build -b py3
+export LANG=C.UTF-8
+export SOURCE_DATE_EPOCH=1582911719
+# -Werror is for werrorists
+export GCC_IGNORE_WERROR=1
+export CFLAGS="$CFLAGS -fno-lto "
+export FCFLAGS="$CFLAGS -fno-lto "
+export FFLAGS="$CFLAGS -fno-lto "
+export CXXFLAGS="$CXXFLAGS -fno-lto "
+export MAKEFLAGS=%{?_smp_mflags}
+python3 setup.py build
 
 %check
 export http_proxy=http://127.0.0.1:9/
@@ -90,8 +152,12 @@ export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 py.test || :
 %install
+export MAKEFLAGS=%{?_smp_mflags}
 rm -rf %{buildroot}
-python3 -tt setup.py build -b py3 install --root=%{buildroot}
+mkdir -p %{buildroot}/usr/share/package-licenses/testrepository
+cp %{_builddir}/testrepository-0.0.20/Apache-2.0 %{buildroot}/usr/share/package-licenses/testrepository/2b8b815229aa8a61e483fb4ba0588b8b6c491890
+cp %{_builddir}/testrepository-0.0.20/COPYING %{buildroot}/usr/share/package-licenses/testrepository/92e73d261542eaa865b52c203f3b6dd549f9fda3
+python3 -tt setup.py build  install --root=%{buildroot}
 echo ----[ mark ]----
 cat %{buildroot}/usr/lib/python3*/site-packages/*/requires.txt || :
 echo ----[ mark ]----
@@ -102,6 +168,11 @@ echo ----[ mark ]----
 %files bin
 %defattr(-,root,root,-)
 /usr/bin/testr
+
+%files license
+%defattr(0644,root,root,0755)
+/usr/share/package-licenses/testrepository/2b8b815229aa8a61e483fb4ba0588b8b6c491890
+/usr/share/package-licenses/testrepository/92e73d261542eaa865b52c203f3b6dd549f9fda3
 
 %files python
 %defattr(-,root,root,-)
