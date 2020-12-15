@@ -6,7 +6,7 @@
 #
 Name     : testrepository
 Version  : 0.0.20
-Release  : 50
+Release  : 51
 URL      : http://pypi.debian.net/testrepository/testrepository-0.0.20.tar.gz
 Source0  : http://pypi.debian.net/testrepository/testrepository-0.0.20.tar.gz
 Source1  : http://pypi.debian.net/testrepository/testrepository-0.0.20.tar.gz.asc
