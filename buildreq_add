@@ -3,7 +3,6 @@
 testtools
 fixtures
 traceback2
-unittest2
 python-mimeparse
 extras
 linecache2

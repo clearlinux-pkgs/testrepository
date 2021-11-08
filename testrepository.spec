@@ -6,7 +6,7 @@
 #
 Name     : testrepository
 Version  : 0.0.20
-Release  : 59
+Release  : 60
 URL      : http://pypi.debian.net/testrepository/testrepository-0.0.20.tar.gz
 Source0  : http://pypi.debian.net/testrepository/testrepository-0.0.20.tar.gz
 Source1  : http://pypi.debian.net/testrepository/testrepository-0.0.20.tar.gz.asc
@@ -33,7 +33,6 @@ BuildRequires : testresources
 BuildRequires : testscenarios
 BuildRequires : testtools
 BuildRequires : traceback2
-BuildRequires : unittest2
 
 %description
 +++++++++++++++
@@ -91,7 +90,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1603405833
+export SOURCE_DATE_EPOCH=1636406001
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fno-lto "
 export FCFLAGS="$FFLAGS -fno-lto "
